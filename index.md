@@ -22,13 +22,13 @@ revealOptions:
 * Principe des PWA
 * Comparatif apps hybrides / natives / web
 * Compatibilité et limitations des PWA
+* Icône et splash screen
 * Service Worker
     * Définition
     * Mise en place / Cycle de vie
 * Gestion du cache
     * Différents modes de stockage des données
     * Les stratégies de cache
-* Icône et splash screen
 * Workbox
 * Notifications push
     * Concept / architecture
@@ -138,6 +138,108 @@ Une PWA, c'est de l'amélioration progressive :
 - L'application **doit** fonctionner si le navigateur ne supporte pas les Services Workers.
 - Ne jamais faire en sorte qu'une requête ne fonctionne uniquement si un Service Worker est présent.
 - Une PWA, c'est un **confort en plus pour l'utilisateur**, ça ne doit pas pénaliser ceux qui ne pourraient pas en profiter.
+
+---
+
+<!-- .slide: class="title bg-rocks" -->
+
+# Icône et splash screen
+
+## Configuration du `manifest.json`
+
+<!--v-->
+
+# Configurer le Manifest de l'application
+
+Pour que notre application se comporte comme une véritable app mobile, nous allons devoir configurer :
+* L'**icône de l'application**
+* Le **nom de l'application** (qui s'affichera sous l'icône)
+* Le style du **splash screen** (l'écran qui s'affiche au chargement de l'app)
+* L'affichage d'un **bandeau qui propose l'installation** de l'app
+* Le **type d'affichage** (plein écran, orientation, couleur du bandeau android,…)
+
+C'est le rôle du fichier `manifest.json`, qui sera appelé via le html :
+
+```html
+<link rel="manifest" href="/manifest.json">
+```
+
+<!--v-->
+
+Le fichier **`manifest.json`** ressemble généralement à ceci :
+
+```json
+{
+    "name": "News Reader, a PWA training",
+    "short_name": "News Reader",
+    "start_url": "/",
+    "icons": [
+        {
+            "src": "/android-chrome-192x192.png",
+            "sizes": "192x192",
+            "type": "image/png"
+        },
+        {
+            "src": "/android-chrome-512x512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#ffffff",
+    "background_color": "#ffffff",
+    "display": "standalone",
+    "related_applications": [{
+        "platform": "play",
+        "url": "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
+    }]
+}
+```
+
+[Référence du Web App Manifest [en]](https://developer.mozilla.org/en-US/docs/Web/Manifest), MDN
+
+<!--v-->
+
+## Définir le nom et le point d'entrée de l'application
+
+* `name` : le nom de l'application qui sera affiché sur le splash screen
+* `short_name` : le nom de qui sera affiché sous l'icône
+* `start_url` : définit la page principale sur laquelle l'utilisateur arrivera
+
+![](images/names.png)
+
+<!--v-->
+
+## Définir le style de l'application
+
+* `background_color` : la couleur de fond du splash screen
+* `theme_color` : la couleur qui sera utilisée pour la barre (exemple ci-dessous)
+
+![](images/theme-color.png)
+
+<!--v-->
+
+## Définir le type d'affichage
+
+* `"display": "browser"` (à gauche)
+* `"display": "standalone"` (à droite)
+
+![](images/manifest-display-options.png)
+
+<!--v-->
+
+## Vérifier le `manifest.json`
+
+On peut vérifier le manifest et les icônes en allant dans l'onglet : **Application > Manifest**.
+
+![](images/manifest.png)
+
+<!--v-->
+
+# Bandeau d'installation de l'app
+
+Une fois l'app manifest déclaré, si [tous les critères sont bien remplis](https://developers.google.com/web/fundamentals/app-install-banners/), le **bandeau d'installation de l'app** (ou **app install banner**) devrait s'afficher automatiquement.
+
+![](images/install-banner.png)
 
 ---
 
@@ -262,13 +364,11 @@ Note: Le SW s'exécute en tâche de fond et doit avoir un **fichier JS dédié**
 
 # Le cycle de vie d'un Service Worker
 
-Quand on consulte le site la première fois, on constate dans la console que le SW se lance.
-
-Si on rafraîchi la page, on ne verra plus le message "`SW: OK`" car le SW s'est déjà déclenché la première fois et ne s'est pas rafraichi, **il tourne toujours en tâche de fond**.
+* Le SW s'active à la première consultation du site.
+* Il restera en tâche de fond (idle) tant qu'il ne sera pas mis à jour
 
 ![](images/register.png)
 
-Par contre, le SW va se mettre à jour si le fichier est modifié. Ce comportement est dû au cycle de vie du Service Worker.
 
 <!--v-->
 
@@ -519,11 +619,19 @@ self.addEventListener('sync', function(event) {
 
 <!--v-->
 
+# Volume de stockage
+
+![](images/cache-size.png)
+
+* Le volume de stockage peut être vérifié avec [Quota Management API](https://developer.mozilla.org/en-US/docs/Web/API/StorageQuota) sur Chrome
+
+<!--v-->
+
 # Utilisation de la Cache API
 
-L'API Service Worker dispose de l'[**interface Cache**](https://developer.mozilla.org/fr/docs/Web/API/Cache), qui va nous permettre de **stocker les réponses des requêtes effectuées par notre application**. 
+* L'[**interface Cache**](https://developer.mozilla.org/fr/docs/Web/API/Cache) permet de **stocker les réponses des requêtes effectuées par notre application**. 
 
-Bien que conçue à la base pour les Services Workers, l'interface Cache est aussi **disponible sur l'objet `window`** et est donc accessible n'importe où via notre script principal.
+* **disponible sur l'objet `window`** et via le SW
 
 Le point d'entrée est **`caches`**.
 
@@ -538,7 +646,8 @@ caches.open('mysite-static-v3').then(function (cache) {
 
 # Quand et quoi mettre en cache ?
 
-Il est possible d'imaginer une infinité de **stratégies pour concevoir le cache d'une application**. [The Offline Cookbook](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/) de Jake Archibald est une très bonne ressource sur le sujet.
+* Une infinité de **stratégies possibles pour concevoir le cache d'une application**.
+* cf. [The Offline Cookbook](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/) de Jake Archibald
 
 ## À quel moment mettre en cache les ressources ?
 
@@ -622,11 +731,14 @@ self.addEventListener('fetch', function (event) {
 
 # Stratégies de réponses : cache ou réseau ?
 
-Comme pour concevoir la manière dont sont stockées les ressources en cache, **de nombreuses stratégies sont possible pour les restituer**. On retiendra principalement :
+On retiendra principalement :
 
 * **Network Only** : on ne veut pas de cache car l'opération est critique/ne peut pas fonctionner hors ligne.
+
 * **Cache First** : on récupère en priorité depuis le cache. S'il n'y a pas encore de cache, on va chercher sur le réseau et on stocke la réponse dans le cache.
+
 * **Network First** : on récupère en priorité depuis le réseau. Si le réseau ne répond pas, on sert le cache afin d'afficher du contenu.
+
 * **Stale While Revalidate** : on récupère le cache et on l'envoie. Le contenu est ainsi directement disponible. Ensuite, on va chercher la requête sur le réseau pour que ce soit à jour la prochaine fois qu'on fait la requête.
 
 Encore une fois, [The Offline Cookbook](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/) recense un grand nombre de pattern possibles.
@@ -641,28 +753,6 @@ La stratégie *Cache first* est la stratégie à adopter pour concevoir une appl
 
 <!--v-->
 
-## Cache first
-
-* La méthode **`caches.match`** va chercher la ressource en cache.
-* Si rien n'est trouvé, la méthode **`fetch`** va chercher la ressource sur le réseau et la renvoie.
-
-```javascript
-// service-worker.js
-
-self.addEventListener('fetch', function (event) {
-    event.respondWith(
-        // On demande au cache si il existe une entrée correspondant à la requête
-        caches.match(event.request).then(function (response) {
-            // Si oui, on renvoie les données du cache
-            // Si non, on fetch la requête via le réseau
-            return response || fetch(event.request);
-        })
-    );
-});
-```
-
-<!--v-->
-
 ## Network first
 
 La stratégie *Network First* est adaptée à ce qui doit être mis à jour très fréquemment : **articles, timeline de réseau social, avatar…**
@@ -671,36 +761,11 @@ La stratégie *Network First* est adaptée à ce qui doit être mis à jour trè
 
 <!--v-->
 
-## Network first
-
-* La méthode **`fetch`** va chercher la ressource en ligne.
-* Si la requête échoue, on cherche en cache
-
-```javascript
-// service-worker.js
-
-self.addEventListener('fetch', function (event) {
-    event.respondWith(
-        // On fait une requête réseau
-        fetch(event.request).catch(function () {
-            // Si elle échoue, on cherche la ressource en cache
-            caches.match(event.request).then(function (response) {
-                // Si elle existe, on renvoie les données du cache
-                // Si non, on retourne un message
-                return response || new Response('Ressource non disponible');
-            })
-        })
-    );
-});
-```
-
-<!--v-->
-
 # Mise à jour du cache
 
-En tant que développeur nous parvenons à mettre à jour manuellement le SW mais ce ne sera pas le cas des utilisateurs. Il faut alors prévoir une méthode pour **mettre à jour le cache de nos utilisateurs**.
+* Il faut prévoir une méthode pour **mettre à jour le cache de nos utilisateurs**.
 
-Pour cela, une des techniques consiste à nommer le cache avec **un numéro de version**, que l'on **changera à chaque mise à jour du site**.
+* Solution : nommer le cache avec **un numéro de version**, que l'on **changera à chaque mise à jour du site**.
 
 ```javascript
 // service-worker.js
@@ -719,31 +784,6 @@ self.addEventListener('install', function (event) {
         })
     );
 });
-```
-
-<!--v-->
-
-## Suppression des anciennes versions en cache
-
-Une fois que l'on connait le nom de la version à jour, on peut supprimer les autres en itérant sur les caches disponibles via **`caches.keys()`**.
-
-```javascript
-// service-worker.js
-
-self.addEventListener('activate', (event) => {
-    // Clean up old cache versions
-    event.waitUntil(
-        caches.keys().then(function (cacheNames) {
-            return Promise.all(
-                cacheNames.map(function (cacheName) {
-                    if (cacheName !== CACHE_NAME) {
-                        return caches.delete(cacheName);
-                    }
-                })
-            )
-        })
-    )
-})
 ```
 
 <!--v-->
@@ -767,325 +807,6 @@ Pour répondre aux critères de **disponibilité** (offline) et de **performance
 * pour accéder au cache : **`caches.open(CACHE_NAME).then(...)`**
 * puis, pour manipuler le cache :
     * **`cache.addAll()`, `cache.put()`, `cache.add()`, `cache.delete()`**
-
----
-
-<!-- .slide: class="title bg-rocks" -->
-
-# Icône et splash screen
-
-## Configuration du `manifest.json`
-
-<!--v-->
-
-# Configurer le Manifest de l'application
-
-Pour que notre application se comporte comme une véritable app mobile, nous allons devoir configurer :
-* L'**icône de l'application**
-* Le **nom de l'application** (qui s'affichera sous l'icône)
-* Le style du **splash screen** (l'écran qui s'affiche au chargement de l'app)
-* L'affichage d'un **bandeau qui propose l'installation** de l'app
-* Le **type d'affichage** (plein écran, orientation, couleur du bandeau android,…)
-
-C'est le rôle du fichier `manifest.json`, qui sera appelé via le html :
-
-```html
-<link rel="manifest" href="/manifest.json">
-```
-
-<!--v-->
-
-Le fichier **`manifest.json`** ressemble généralement à ceci :
-
-```json
-{
-    "name": "News Reader, a PWA training",
-    "short_name": "News Reader",
-    "start_url": "/",
-    "icons": [
-        {
-            "src": "/android-chrome-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/android-chrome-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
-    "display": "standalone",
-    "related_applications": [{
-        "platform": "play",
-        "url": "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
-    }]
-}
-```
-
-[Référence du Web App Manifest [en]](https://developer.mozilla.org/en-US/docs/Web/Manifest), MDN
-
-<!--v-->
-
-## Définir le nom et le point d'entrée de l'application
-
-* `name` : le nom de l'application qui sera affiché sur le splash screen
-* `short_name` : le nom de qui sera affiché sous l'icône
-* `start_url` : définit la page principale sur laquelle l'utilisateur arrivera
-
-![](images/names.png)
-
-<!--v-->
-
-## Définir le style de l'application
-
-* `background_color` : la couleur de fond du splash screen
-* `theme_color` : la couleur qui sera utilisée pour la barre (exemple ci-dessous)
-
-![](images/theme-color.png)
-
-<!--v-->
-
-## Définir le type d'affichage
-
-* `"display": "browser"` (à gauche)
-* `"display": "standalone"` (à droite)
-
-![](images/manifest-display-options.png)
-
-<!--v-->
-
-## Vérifier le `manifest.json`
-
-On peut vérifier le manifest et les icônes en allant dans l'onglet : **Application > Manifest**.
-
-![](images/manifest.png)
-
-<!--v-->
-
-# Bandeau d'installation de l'app
-
-Une fois l'app manifest déclaré, si [tous les critères sont bien remplis](https://developers.google.com/web/fundamentals/app-install-banners/), le **bandeau d'installation de l'app** (ou **app install banner**) devrait s'afficher automatiquement.
-
-![](images/install-banner.png)
-
----
-
-<!-- .slide: class="title bg-rocks" -->
-
-# Détecter les changements d'état
-
-## lors d'une mise à jour
-
-<!--v-->
-
-# Pourquoi notifier l'utilisateur ?
-
-Comme nous avons mis en place la stratégie *Cache First* pour les assets, s'il y a une modification du template, **l'utilisateur ne la verra pas tant qu'il n'aura pas vider son cache**.
-
-Nous pouvons alors imaginer plusieurs scénarios :
-* **Notifier l'utilisateur** et lui proposer de passer à la nouvelle version
-* **Forcer la mise à jour** (pour des mises à jour de sécurité par exemple)
-* **Ne rien faire** : s'il s'agit de modification mineures (on privilégie la performance)
-
-<!--v-->
-
-Cas d'usage : une nouvelle version du site est en attente
-
-![](images/update-before.png)
-
-<!--v-->
-
-Résultat attendu : remplacer la version courante par la nouvelle
-
-![](images/update-after.png)
-
-<!--v-->
-
-# Notifier l'utilisateur, comment faire ?
-
-* Vérifier si un nouveau service worker est **en attente**
-    * en inspectant les propriétés du worker et ses événements
-    * dans les devtools
-![](images/skipwaiting.png)
-* Lorsqu'on détecte un service worker prêt, on **affiche une notification**
-* Si l'utilisateur accepte, on **transmet un message au SW avec `postMessage()`**
-* Le Service Worker reçoit l'event `message`, il force l'activation du nouveau
-* Recharger la page pour voir la nouvelle version
-
-<!--v-->
-
-# Vérifier si un service worker est en attente
-
-**Si aucun SW n'est actif** sur la page, alors **la page est entièrement chargée via le réseau**. Ce n'est pas nécessaire de proposer une mise à jour du cache.
-
-**`reg.active`** et **`navigator.serviceWorker.controller`** 
-retournent le SW actif ou null s'il n'y en a pas (ou si la page a été rafraichie avec Shift)
-
-```javascript
-// index.js
-
-navigator.serviceWorker.register('/sw.js').then(function(reg) {
-    // Si on est dans la Promise du register, alors on a accès à reg
-    if (!reg.active) {
-        return;
-    }
-});
-
-// Si on est en dehors de la Promise, on peut véirifier 
-// qu'un service worker contrôle la page avec le code suivant
-if (!navigator.serviceWorker.controller) {
-    return;
-}
-```
-
-<!--v-->
-
-## À quelle étape se trouve le SW ?
-
-La déclaration (`register`) du SW retourne une Promise. Cette promise renvoie en paramètre un **objet `regristration` (ou `reg`)**. 
-
-Cet objet contient des propriétés et des méthodes qui vont nous permettre **d'observer chaque étape du cycle de vie du worker**.
-
-```javascript
-// index.js
-
-navigator.serviceWorker.register('/sw.js').then(function(reg) {
-    reg.unregister(); // Désinstalle le worker
-    reg.update();     // Force la mise à jour du service worker
-
-    reg.installing;   // Renvoie le worker en cours d'installation ou undefined
-    reg.waiting;      // Renvoie le worker en attente ou undefined
-    reg.active;       // Renvoie le worker active ou undefined
-}
-```
-
-<!--v-->
-
-## Écouter les événements et suivre l'état du SW
-
-```javascript
-// index.js
-
-navigator.serviceWorker.register('/sw.js').then(reg => {
-  reg.addEventListener('updatefound', () => {
-    // Un nouveau service worker est arrivé dans reg.installing !
-    const newWorker = reg.installing;
-
-    newWorker.state;
-    // "installing" - événement install émis, mais pas résolu
-    // "installed"  - événement install émis et résolu
-    // "activating" - événement activate émis, mais pas résolu
-    // "activated"  - événement activate émie et résolu
-    // "redundant"  - worker mis de côté : l'installation a échouée
-    //                ou le worker a été remplacé
-
-    newWorker.addEventListener('statechange', () => {
-      // newWorker.state a changé
-    });
-  });
-});
-```
-
-<!--v-->
-
-## Scénario pour détecter si une nouvelle version est prête
-
-```javascript
-// index.js
-
-// Fonction pour détecter la fin de l'installation d'un worker
-function trackInstalling(worker) {
-    worker.addEventListener('statechange', () => {
-        if (worker.state == 'installed') {
-            // Un nouveau worker est prêt !!
-        }
-    });
-};
-
-// S'il n'y a pas de controller, la page n'est pas chargée via le service worker
-if (!navigator.serviceWorker.controller) {
-    return;
-}
-
-// Si une nouvelle version est déjà installée,
-// elle est en attente, on affiche la notification
-if (reg.waiting) {
-    // Un nouveau worker est prêt !!
-    return;
-}
-
-// Si le SW est en cours d'installation, alors on vérifie son état
-// si il est "installed", on affiche la notification
-if (reg.installing) {
-    trackInstalling(reg.installing);
-    return;
-}
-
-// Sinon, on vérifie s'il y a un workers disponibles
-// puis on vérifie son état, si il est "installed", on affiche la notification
-reg.addEventListener('updatefound', () => {
-    trackInstalling(reg.installing);
-    return;
-});
-```
-
-<!--v-->
-
-# Transmettre le message au Service Worker
-
-Pour rappel, nous pouvons communiquer avec le service worker :
-
-```javascript
-// index.js
-function sendMessage(message) {
-    // navigator.serviceWorker.controller est égal à l'objet du SW actif
-    // ou null, s'il n'y en a pas
-    if (navigator.serviceWorker.controller) {
-        navigator.serviceWorker.controller.postMessage('Bonjour');
-    }
-}
-```
-
-```javascript
-// service-worker.js
-self.addEventListener("message", event => {
-    // Ici on récupère les messages émis par le JS du site
-    console.log("Message reçu : " + event.data);
-});
-```
-
-<!--v-->
-
-# Activer le Service Worker en attente
-
-S'il y a un Service Worker en attente, nous pouvons le passer en mode actif (ce qui passera le SW courant en *redundant*)
-
-* Via les devtools (lien skipWaiting dans l'onglet Service Workers)
-* Avec la commande suivante :
-
-```javascript
-// service-worker.js
-
-self.skipWaiting();
-```
-
-<!--v-->
-
-# Détecter le changement de controller
-
-Enfin, dernière étape, on peut écouter l'événement `controllerchange` dans le script principal et rafraichir la page pour afficher la nouvelle version.
-
-
-```javascript
-// index.js
-
-navigator.serviceWorker.addEventListener('controllerchange', () => {
-    // Cet événement est émis quand le Service Worker 
-    // qui contrôle la page (= le Service Worker actif) change
-});
-```
 
 ---
 
