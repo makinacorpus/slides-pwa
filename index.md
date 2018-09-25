@@ -29,6 +29,7 @@ revealOptions:
 * Gestion du cache
     * Différents modes de stockage des données
     * Les stratégies de cache
+* Détection de changement d'état
 * Workbox
 * Notifications push
     * Concept / architecture
@@ -812,7 +813,7 @@ Pour répondre aux critères de **disponibilité** (offline) et de **performance
 
 <!-- .slide: class="title bg-rocks" -->
 
-# Détecter les changements d'état
+# Détection de changement d'état
 
 ## lors de la perte de connexion
 
@@ -901,12 +902,6 @@ navigator.serviceWorker.ready.then(function(registration) {
   })
 });
 ```
-
-<!--v-->
-
-## Exemples UX de messages offline / update
-
-[Exemples UX](https://developers.google.com/web/fundamentals/instant-and-offline/offline-ux)
 
 ---
 
@@ -1059,9 +1054,10 @@ ref.pushManager.getSubscription().then((subscription) => {
 
 # Service de messagerie (push service)
 
-Le rôle du service de messagerie (ou push service) est d'identifier les clients afin de **transmettre le message émis par le serveur push**, via le service worker. Chaque navigateur dispose d'un service de messagerie.
-
-En tant que développeur, nous n'avons pas à nous soucier du serice de messagerie, on connaît le endpoint via le [**`PushSubscription`**](https://developer.mozilla.org/fr/docs/Web/API/PushSubscription) reçu lorsqu'une souscription est faite.
+* Identifie les clients
+* **Transmet le message émis par le serveur push** aux clients ciblés
+* Chaque navigateur dispose d'un service de messagerie.
+* On connaît le endpoint via le [**`PushSubscription`**](https://developer.mozilla.org/fr/docs/Web/API/PushSubscription) reçu lorsqu'une souscription est faite.
 
 ## Les services de messagerie des navigateurs
 
@@ -1069,6 +1065,9 @@ En tant que développeur, nous n'avons pas à nous soucier du serice de messager
 * [Autopush](https://github.com/mozilla-services/autopush) pour Firefox
 * [Microsoft Notification Hub](https://msdn.microsoft.com/en-us/library/azure/jj891130.aspx) pour Windows Mobile
 * [Apple Push Notification service](https://developer.apple.com/library/content/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/APNSOverview.html) (APNs) pour Safari
+
+Note: En tant que développeur, nous n'avons pas à nous soucier du serice de messagerie, on connaît le endpoint via le PushSubscription
+
 
 <!--v-->
 
