@@ -1,0 +1,3 @@
+[submodule "theme-reveal"]
+	path = theme-reveal
+	url = git@gitlab.makina-corpus.net:formation/theme-reveal.git

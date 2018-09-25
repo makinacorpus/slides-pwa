@@ -1,0 +1,19 @@
+{
+  "name": "theme-reveal",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node-sass -r --output-style compressed source -o ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.makina-corpus.net:formation/theme-reveal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "node-sass": "^4.7.2"
+  }
+}
