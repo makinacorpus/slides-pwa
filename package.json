@@ -18,6 +18,6 @@
   "license": "ISC",
   "devDependencies": {
     "phantomjs": "^2.1.7",
-    "reveal-md": "^1.1.0"
+    "reveal-md": "^2.1.2"
   }
 }
