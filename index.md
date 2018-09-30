@@ -43,6 +43,18 @@ revealOptions:
 
 <!--v-->
 
+# Le marché mobile aujourd'hui
+
+![](images/mobile-apps.png)
+
+* Seuls les jeux et les "grands classiques" (WhatsApp, Facebook, email, etc.) s'en sortent.
+
+* Les coûts de développement d'une app sur les stores restent très supérieurs aux coûts habituels des développements web.
+
+<!--v-->
+
+# Pricipe des PWA
+
 ## Une application accessible par navigateur
 
 ![Starbucks](images/starbucks.png)
@@ -55,19 +67,13 @@ revealOptions:
 
 <!--v-->
 
-# Principe des PWA
+## Principe de l'amélioration progressive
 
-* Site répondant aux **standards du web**
+* Doit fonctionner si le navigateur ne supporte pas les SW.
 
-* Accessible depuis un navigateur
+* Ne jamais faire en sorte qu'une requête ne fonctionne que si un SW est présent.
 
-* Amélioration progressive
-
-* Mais qui **répond à certains critères**...
-
-(PWA **n'est PAS** estampillé Google. Même si les Google Developers contribuent beaucoup à la documentation sur le sujet.)
-
-Note: Terme marketing "inventé" pour promouvoir une façon de concevoir des sites web
+* Une PWA, c'est un **confort en plus pour l'utilisateur**
 
 <!--v-->
 
@@ -81,6 +87,8 @@ Note: Terme marketing "inventé" pour promouvoir une façon de concevoir des sit
     * Mode plein écran
     * Possibilité de l'installer
     * Push notifications
+
+Note: Terme marketing "inventé" pour promouvoir une façon de concevoir des sites web
 
 <!--v-->
 
@@ -100,36 +108,29 @@ Note: Terme marketing "inventé" pour promouvoir une façon de concevoir des sit
 
 # Comparatif
 
-#### Applications natives
-
-* Développement spécifique Android (Java) / iOS (Swift)
-* JS compilé en natif : React Native, Native Script
-
-#### Applications hybrides
-
-* Navigateur web "encapsulé" : Ionic, Cordova
-
-#### Applications web
-
-* Progressive Web App
-
-![](images/mobile-apps.png)
+|	          |  Natif	     | Hybride     |	PWA    |
+| ----------- | ------------ | ----------- | --------- |
+| Coût        |	N	         | N/2         | N/4       |
+| Installation | via un store | via un store | en naviguant |
+| Taille      |	plusieurs Mo | plusieurs Mo | poids de la page web |
+| Mode hors ligne |	✔ | ✔ | ✔ |
+| Notifications | ✔ | ✔ | ✔ |
+| GPS | ✔ | ✔ | ✔ |
+| Appareil photo | ✔ | ✔ | ✔ |
+| Accès système | ✔ |✔ | non |
 
 <!--v-->
 
 ## Les avantages des PWA
 
-* Comportement similaire à une app native 
-
-* Sans les contraintes des apps mobiles (soumission aux stores, coût en stockage / mémoire)
-
-* Coûts de développement moindres (pas de développements spécifiques à chaque plateforme)
-
+* Meilleure gestion des mises à jour logicielles
+* Distribution simplifiée
+* Technologie plus simple
+* Meilleure maintenabilité
 
 ## Les inconvénients des PWA
 
 * Encore mal supporté par Safari
-
 * Pas le plus adapté pour les applications lourdes (cartographie, audio,...)
 
 
@@ -150,16 +151,6 @@ if ('serviceWorker' in navigator) {
 ```
 
 Note: Aujourd'hui, les services workers sont compatibles avec, **Chrome**, **Firefox**, **Safari** à partir de la version 11 de iOS.
-
-<!--v-->
-
-## Principe de l'amélioration progressive
-
-* Doit fonctionner si le navigateur ne supporte pas les SW.
-
-* Ne jamais faire en sorte qu'une requête ne fonctionne que si un SW est présent.
-
-* Une PWA, c'est un **confort en plus pour l'utilisateur**
 
 ---
 
@@ -228,8 +219,6 @@ Le fichier **`manifest.json`** ressemble généralement à ceci :
 
 ![](images/names.png)
 
-* `start_url` : point d'entrée de l'application
-
 <!--v-->
 
 ### Définir la couleur principale : `theme_color`
@@ -237,15 +226,6 @@ Le fichier **`manifest.json`** ressemble généralement à ceci :
 Détecté automatiquement par Chrome, personnalisable.
 
 ![Theme color](images/theme-color.png)
-
-<!--v-->
-
-## Définir le type d'affichage
-
-* `"display": "browser"` (à gauche)
-* `"display": "standalone"` (à droite)
-
-![](images/manifest-display-options.png)
 
 <!--v-->
 
@@ -262,6 +242,12 @@ On peut vérifier le manifest et les icônes en allant dans l'onglet **Applicati
 Le **bandeau d'installation de l'app** s'affiche automatiquement si [tous les critères sont bien remplis](https://developers.google.com/web/fundamentals/app-install-banners/).
 
 ![](images/install-banner.png)
+
+Note:
+* App pas encore installée
+* Manifest.json complet
+* HTTPS
+* Service Worker qui intercepte les requêtes (pour le cache)
 
 ---
 
@@ -758,6 +744,9 @@ Doit-ont utiliser les PWA aujourdh'ui ?
 
 https://github.com/makinacorpus/pwa-training
 
+## Slides sur Github
+
+https://makinacorpus.github.io/slides-pwa/
 
 ---
 
@@ -794,6 +783,8 @@ https://github.com/makinacorpus/pwa-training
 
 ---
 
-<!-- .slide: class="title bg-rocks" -->
+<!-- .slide: class="title alternate" -->
 
 # Des questions ?
+
+https://makinacorpus.github.io/slides-pwa/
