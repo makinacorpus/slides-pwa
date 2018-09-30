@@ -15,7 +15,7 @@ revealOptions:
 
 ---
 
-<!-- .slide: class="programme bg-lion-left" -->
+<!-- .slide: class="alternate" -->
 
 ## Sommaire
 
@@ -267,7 +267,7 @@ Le **bandeau d'installation de l'app** s'affiche automatiquement si [tous les cr
 
 <!-- .slide: class="title bg-rocks" -->
 
-# Les Service Worker
+# Service Worker
 
 <!--v-->
 
