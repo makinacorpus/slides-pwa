@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "reveal-md index.md -w",
     "build:pdf": "reveal-md index.md --print pwa.pdf",
-    "build:html": "reveal-md index.md --static support-pwa --static-dirs images --css theme-reveal/makina.css"
+    "build:html": "reveal-md index.md --static docs --static-dirs images --css theme-reveal/makina.css"
   },
   "repository": {
     "type": "git",
