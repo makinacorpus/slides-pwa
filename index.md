@@ -31,8 +31,6 @@ revealOptions:
 
 * Stockage des données
 
-* Workbox
-
 * Notifications push
 
 ---
@@ -287,6 +285,13 @@ Note:
 
 Les framework (React, Vue, Angular,...) disposent en général déjà de Workbox ou d'une implémentation pour gérer les SW.
 
+Note:
+* Precaching
+* Stratégies de cache
+* Versionning de cache 
+* Génération automatique de la liste des ressources
+* Background Sync
+
 <!--v-->
 
 ## Déclaration du Service Worker avec `register`
@@ -456,22 +461,6 @@ self.addEventListener("message", event => {
 * Espace total par domaine, toutes API confondues
 
 * [Quota Management API](https://developer.mozilla.org/en-US/docs/Web/API/StorageQuota) (sur Chrome uniquement)
-
-<!--v-->
-
-# Utilisation de la Cache API
-
-* L'[**interface Cache**](https://developer.mozilla.org/fr/docs/Web/API/Cache) permet de **stocker les réponses des requêtes effectuées par notre application**. 
-
-* **disponible sur l'objet `window`** et via le SW
-
-Le point d'entrée est **`caches`**.
-
-```javascript
-caches.open('mysite-static-v3').then(function (cache) {
-    // Ici on peut ajouter ou supprimer des éléments à cache
-}
-```
    
 <!--v-->
 
@@ -560,46 +549,6 @@ Pour répondre aux critères de **disponibilité** (offline) et de **performance
 * **Cache API** pour les assets
 * **IndexedDB** pour les données (state, data),...
 * Limité en taille
-
----
-
-<!-- .slide: class="title bg-rocks" -->
-
-# Workbox
-
-<!--v-->
-
-# Workbox
-
-[Workbox](https://developers.google.com/web/tools/workbox/) est une librairie qui facilite la conception d'applications hors ligne :
-
-* Precaching
-* Stratégies de cache
-* Versionning de cache 
-* Génération automatique de la liste des ressources
-* Background Sync
-
-<!--v-->
-
-## Workbox config
-
-```js
-module.exports = {
-  globDirectory: "public/",
-  globPatterns: [
-    "**/*.{js,png,xml,ico,svg,html,json,css}",
-  ],
-  swDest: "public/service-worker.js",
-  runtimeCaching: [{
-    urlPattern: new RegExp('^https://media\.guim\.co\.uk/'),
-    handler: 'staleWhileRevalidate'
-  },
-  {
-    urlPattern: new RegExp('^https://content\.guardianapis\.com/'),
-    handler: 'staleWhileRevalidate'
-  }]
-};
-```
 
 ---
 
