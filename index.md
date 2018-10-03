@@ -327,15 +327,6 @@ Note: Le SW s'exécute en tâche de fond et doit avoir un **fichier JS dédié**
 
 # Le cycle de vie d'un Service Worker
 
-* Le SW s'active à la première consultation du site.
-* Il restera en tâche de fond (idle) tant qu'il ne sera pas mis à jour
-
-![](images/register.png)
-
-<!--v-->
-
-# Le cycle de vie d'un Service Worker
-
 ![](images/sw-lifecycle.png)
 
 <!--v-->
@@ -474,13 +465,13 @@ On retiendra principalement :
 
 * **Stale While Revalidate** : on récupère d'abord le cache. Ensuite on fait la requête sur le réseau et on met en cache la réponse pour la prochaine fois.
 
-cf. [The Offline Cookbook](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/)
+cf. [The Offline Cookbook](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/), de Jake Archibald
 
 <!--v-->
 
 ## Cache first
 
-Pour du offline-first
+Pour les assets (html, css, js, images,...)
 
 ![](images/ss-falling-back-to-network.png)
 
@@ -590,15 +581,6 @@ Transmet la notification au Service Worker
 
 <!--v-->
 
-## UX : demande de permission
-
-* Expliquer en quoi les notifications seront utiles à l'utilisateur
-* Moins intrusif
-
-![](images/permission-ux.png)
-
-<!--v-->
-
 ## Serveur d'application (push provider)
 
 Le serveur d'application sert à **piloter l'envoi de message push**.
@@ -630,18 +612,9 @@ print result
 
 <!--v-->
 
-## VAPID
-
-* Voluntary Application Server Identification for Web Push (**application server key**)
-* Clé unique permettant de chiffrer les messages qui transitent à travers le push service.
-
 ![](images/push.png)
 
 Note: VAPID est une spec de la Push API.
-
-<!--v-->
-
-![](images/web-push-notifications-technological-overview.gif)
 
 <!--v-->
 
