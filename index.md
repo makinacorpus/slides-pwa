@@ -21,15 +21,13 @@ revealOptions:
 
 * Principe des PWA
 
-* Apps hybrides / natives / web
-
-* Compatibilité et limitations
-
-* Icône et splash screen
+* Personnalisation du thème
 
 * Service Worker
 
 * Stockage des données
+
+* Workbox
 
 * Notifications push
 
@@ -51,6 +49,21 @@ revealOptions:
 
 <!--v-->
 
+# Comparatif
+
+|	          |  Natif	     | Hybride     |	PWA    |
+| ----------- | ------------ | ----------- | --------- |
+| Coût        |	N	         | N/2         | N/4       |
+| Installation | via un store | via un store | en naviguant |
+| Taille      |	plusieurs Mo | plusieurs Mo | poids de la page web |
+| Mode hors ligne |	✔ | ✔ | ✔ |
+| Notifications | ✔ | ✔ | ✔ |
+| GPS | ✔ | ✔ | ✔ |
+| Appareil photo | ✔ | ✔ | ✔ |
+| Accès système | ✔ |✔ | non |
+
+<!--v-->
+
 # Pricipe des PWA
 
 ## Une application accessible par navigateur
@@ -62,16 +75,6 @@ revealOptions:
 ## Disponible hors ligne
 
 ![L'Équipe](images/lequipe.png)
-
-<!--v-->
-
-## Principe de l'amélioration progressive
-
-* Doit fonctionner si le navigateur ne supporte pas les SW.
-
-* Ne jamais faire en sorte qu'une requête ne fonctionne que si un SW est présent.
-
-* Une PWA, c'est un **confort en plus pour l'utilisateur**
 
 <!--v-->
 
@@ -100,22 +103,6 @@ Note: Terme marketing "inventé" pour promouvoir une façon de concevoir des sit
 * Accessibilité
 * Bonnes pratiques
 * SEO
-
-
-<!--v-->
-
-# Comparatif
-
-|	          |  Natif	     | Hybride     |	PWA    |
-| ----------- | ------------ | ----------- | --------- |
-| Coût        |	N	         | N/2         | N/4       |
-| Installation | via un store | via un store | en naviguant |
-| Taille      |	plusieurs Mo | plusieurs Mo | poids de la page web |
-| Mode hors ligne |	✔ | ✔ | ✔ |
-| Notifications | ✔ | ✔ | ✔ |
-| GPS | ✔ | ✔ | ✔ |
-| Appareil photo | ✔ | ✔ | ✔ |
-| Accès système | ✔ |✔ | non |
 
 <!--v-->
 
@@ -154,7 +141,7 @@ Note: Aujourd'hui, les services workers sont compatibles avec, **Chrome**, **Fir
 
 <!-- .slide: class="title bg-rocks" -->
 
-# Icône et splash screen
+# Personnalisation du thème
 
 ## `manifest.json`
 
@@ -177,39 +164,6 @@ Il est déclaré via le html
 ```html
 <link rel="manifest" href="/manifest.json">
 ```
-
-<!--v-->
-
-Le fichier **`manifest.json`** ressemble généralement à ceci :
-
-```json
-{
-    "name": "News Reader, a PWA training",
-    "short_name": "News Reader",
-    "start_url": "/",
-    "icons": [
-        {
-            "src": "/android-chrome-192x192.png",
-            "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "/android-chrome-512x512.png",
-            "sizes": "512x512",
-            "type": "image/png"
-        }
-    ],
-    "theme_color": "#ffffff",
-    "background_color": "#ffffff",
-    "display": "standalone",
-    "related_applications": [{
-        "platform": "play",
-        "url": "https://play.google.com/store/apps/details?id=cheeaun.hackerweb"
-    }]
-}
-```
-
-[Référence du Web App Manifest [en]](https://developer.mozilla.org/en-US/docs/Web/Manifest), MDN
 
 <!--v-->
 
@@ -272,25 +226,6 @@ Ils fonctionnent uniquement sur HTTPS pour des raisons de sécurité.
 Note: 
 * Thread en arrière-plan => notification et mise en cache en arrière plan.
 * Proxy => intercepte les requêtes émises et contrôle les réponse
-
-<!--v-->
-
-## Les outils
-
-* [**Service Worker Precache**](https://github.com/GoogleChromeLabs/sw-precache)
-
-* [**Service Worker Toolbox**](https://github.com/GoogleChromeLabs/sw-toolbox)
-
-* [**Workbox**](https://developers.google.com/web/tools/workbox/)
-
-Les framework (React, Vue, Angular,...) disposent en général déjà de Workbox ou d'une implémentation pour gérer les SW.
-
-Note:
-* Precaching
-* Stratégies de cache
-* Versionning de cache 
-* Génération automatique de la liste des ressources
-* Background Sync
 
 <!--v-->
 
@@ -403,7 +338,7 @@ event.respondWith(
 
 <!--v-->
 
-## Communiquer avec le JS du site avec `message`
+# Communiquer avec le JS du site
 
 ```javascript
 // index.js
@@ -526,32 +461,77 @@ self.addEventListener('fetch', function (event) {
 
 <!--v-->
 
-# Conclusion
+# Mise à jour du cache
 
-Pour répondre aux critères de **disponibilité** (offline) et de **performance** :
+```javascript
+// service-worker.js
+const CACHE_NAME = 'mysite-static-v3'
 
-### Service Worker
+self.addEventListener('activate', (event) => {
+    // Clean up old cache versions
+    event.waitUntil(
+        caches.keys().then(function (cacheNames) {
+            return Promise.all(
+                cacheNames.map(function (cacheName) {
+                    if (cacheName !== CACHE_NAME) {
+                        return caches.delete(cacheName);
+                    }
+                })
+            )
+        })
+    )
+})
+```
 
-* Intercepte des évenements
-* Pilote la mise en cache et la restitution des données
+---
 
-### Stockage des données
+<!-- .slide: class="title bg-rocks" -->
 
-* **Cache API** pour les assets
-* **IndexedDB** pour les données (state, data),...
-* Limité en taille
+# Workbox
+
+<!--v-->
+
+# Workbox
+
+[Workbox](https://developers.google.com/web/tools/workbox/) est une librairie qui facilite la conception d'applications hors ligne :
+
+* Precaching
+* Stratégies de cache
+* Versionning de cache 
+* Génération automatique de la liste des ressources
+* Background Sync
+
+
+Note: Les framework (React, Vue, Angular,...) disposent en général déjà de Workbox ou d'une implémentation (SW precache, SW toolbox) pour gérer les SW.
+
+
+<!--v-->
+
+# Exemple `workbox.config.js`
+
+```javascript
+module.exports = {
+  globDirectory: 'public/',
+  globPatterns: [
+    '**/*.{js,png,xml,ico,svg,html,json,css}',
+  ],
+  swDest: 'public/service-worker.js',
+  runtimeCaching: [{
+    urlPattern: new RegExp('^https://media\.guim\.co\.uk/'),
+    handler: 'cacheFirst'
+  },
+  {
+    urlPattern: new RegExp('^https://content\.guardianapis\.com/'),
+    handler: 'staleWhileRevalidate'
+  }]
+};
+```
 
 ---
 
 <!-- .slide: class="title bg-rocks" -->
 
 # Notifications push
-
-<!--v-->
-
-# Mise en place de Push Notification
-
-![](images/web-push-notifications-technological-overview.gif)
 
 <!--v-->
 
@@ -566,6 +546,12 @@ Permet au service worker de recevoir des messages reçus du push service
 Message visible par l'utilisateur (piloté par le SW) 
 
 ![](images/notifications.png)
+
+<!--v-->
+
+# Mise en place de Push Notification
+
+![](images/web-push-notifications-technological-overview.gif)
 
 <!--v-->
 
@@ -626,20 +612,6 @@ Note: VAPID est une spec de la Push API.
 | [Pushcrew](https://pushcrew.com/) | Simple à utiliser, segmentation, ne supporte pas Safari | Gratuit jusqu'à 2000&nbsp;abonnés |
 | [Pusher](https://pusher.com)     | Abstraction de la Push API et intégration d'APNs (Safari), envoi des messages via une CLI ou intégration à un serveur | Gratuit jusqu'à 100&nbsp;abonnés
 | [Pushpad](https://pushpad.xyz/) | Abstraction de la Push API et intégration d'APNs (Safari) | À partir de 5$/mois
-
-<!--v-->
-
-# Exemple OneSignal
-
-![](images/onesignal-config.png)
-
-<!--v-->
-
-## Envoi de messages Push avec OneSignal
-
-Paramétrer l'envoi de messages push
-
-![](images/onesignal-translation.png)
 
 ---
 
