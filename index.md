@@ -43,53 +43,21 @@ revealOptions:
 
 ![](images/mobile-apps.png)
 
-* Seuls les jeux et les "grands classiques" (WhatsApp, Facebook, email, etc.) s'en sortent.
+## Une PWA est un site web qui répond à ces critères :
 
-* Les coûts de développement d'une app sur les stores restent très supérieurs aux coûts habituels des développements web.
+* Performance
+* Disponibilité
+* Expérience similaire aux applications natives
 
-<!--v-->
-
-# Comparatif
-
-|	          |  Natif	     | Hybride     |	PWA    |
-| ----------- | ------------ | ----------- | --------- |
-| Coût        |	N	         | N/2         | N/4       |
-| Installation | via un store | via un store | en naviguant |
-| Taille      |	plusieurs Mo | plusieurs Mo | poids de la page web |
-| Mode hors ligne |	✔ | ✔ | ✔ |
-| Notifications | ✔ | ✔ | ✔ |
-| GPS | ✔ | ✔ | ✔ |
-| Appareil photo | ✔ | ✔ | ✔ |
-| Accès système | ✔ |✔ | non |
+Note: Terme marketing "inventé" pour promouvoir une façon de concevoir des sites web
 
 <!--v-->
-
-# Pricipe des PWA
-
-## Une application accessible par navigateur
 
 ![Starbucks](images/starbucks.png)
 
 <!--v-->
 
-## Disponible hors ligne
-
 ![L'Équipe](images/lequipe.png)
-
-<!--v-->
-
-## Doit répondre à ces critères
-
-* **Performance** : fonctionnelle quelque soit la performance de l'appareil ou du réseau.
-
-* **Disponibilité** : doit toujours être accessible, indépendamment de l'appareil ou de la qualité du réseau.
-
-* **Expérience similaire aux applications natives** :
-    * Mode plein écran
-    * Possibilité de l'installer
-    * Push notifications
-
-Note: Terme marketing "inventé" pour promouvoir une façon de concevoir des sites web
 
 <!--v-->
 
@@ -164,20 +132,6 @@ Il est déclaré via le html
 ```html
 <link rel="manifest" href="/manifest.json">
 ```
-
-<!--v-->
-
-## Définir le nom et le point d'entrée de l'application
-
-![](images/names.png)
-
-<!--v-->
-
-### Définir la couleur principale : `theme_color`
-
-Détecté automatiquement par Chrome, personnalisable.
-
-![Theme color](images/theme-color.png)
 
 <!--v-->
 
