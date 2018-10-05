@@ -294,7 +294,7 @@ event.respondWith(
 
 <!--v-->
 
-# Communiquer avec le JS du site
+## Communiquer avec le JS du site
 
 ```javascript
 // index.js
