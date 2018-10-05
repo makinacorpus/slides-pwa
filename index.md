@@ -13,6 +13,8 @@ revealOptions:
 
 ### Alexandra Janin
 
+Note: Makina Corpus : société de service en logiciel libre, spécialisée dans le développement d'applications métiers et de cartographies sur le web.
+
 ---
 
 <!-- .slide: class="alternate" -->
@@ -332,6 +334,8 @@ self.addEventListener("message", event => {
 * **Cache API** pour les assets
 * **IndexedDB** pour les données et state de l'application 
 
+Note: IndexedDB : lib LokiJS
+
 <!--v-->
 
 ## Espace disponible
@@ -345,18 +349,6 @@ self.addEventListener("message", event => {
 <!--v-->
 
 # Stratégies de cache
-
-* **Cache First**
-
-* **Network First**
-
-* **Stale While Revalidate** : on récupère d'abord le cache. Ensuite on fait la requête sur le réseau et on met en cache la réponse pour la prochaine fois.
-
-* ...
-
-cf. [The Offline Cookbook](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/), de Jake Archibald
-
-<!--v-->
 
 ## Cache first
 
@@ -412,6 +404,20 @@ self.addEventListener('fetch', function (event) {
     );
 });
 ```
+
+<!--v-->
+
+# Stratégies de cache
+
+* **Cache First**
+
+* **Network First**
+
+* **Stale While Revalidate** : on récupère d'abord le cache. Ensuite on fait la requête sur le réseau et on met en cache la réponse pour la prochaine fois.
+
+* ...
+
+cf. [The Offline Cookbook](https://developers.google.com/web/fundamentals/instant-and-offline/offline-cookbook/), de Jake Archibald
 
 <!--v-->
 
@@ -501,11 +507,50 @@ Message visible par l'utilisateur (piloté par le SW)
 
 ![](images/notifications.png)
 
+
 <!--v-->
 
-# Mise en place de Push Notification
+* Un **serveur d'application** (provider) permettant de piloter l'envoi de push
+* Un **service de messagerie** (ou push service) qui transmet la notification au service worker
+* Une app avec un service worker qui souscrit au service de messagerie
 
-![](images/web-push-notifications-technological-overview.gif)
+![](images/push.png)
+
+<!--v-->
+
+## Demande de permission
+
+![](images/push-chrome.png)
+
+```javascript
+// index.js
+navigator.serviceWorker.ready.then((reg) => {
+    reg.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: window.vapidPublicKey
+    });
+});
+```
+
+<!--v-->
+
+Exemple de réponse à `pushManager.getSubscription()`
+
+```javascript
+{
+    endpoint: "https://android.googleapis.com/gcm/send/a-subscription-id",
+    keys: {
+        auth: 'AEl35...7fG',
+        p256dh: 'Fg5t8...2rC'
+    } 
+}
+```
+
+## VAPID
+
+Voluntary Application Server Identification for Web Push ([VAPID](https://tools.ietf.org/html/draft-ietf-webpush-vapid)), aussi appelé **application server key** est un système d'identification.
+
+Note: Permet de chiffrer les messages
 
 <!--v-->
 
@@ -552,9 +597,16 @@ print result
 
 <!--v-->
 
-![](images/push.png)
+# Mise en place de Push Notification
 
-Note: VAPID est une spec de la Push API.
+![](images/web-push-notifications-technological-overview.gif)
+
+Note:
+* 1 - Le client télécharge l'app et installe le service worker
+* 2 - Le service worker souscris auprès du push service
+* 3 - Le service worker renvoie l'objet d'identification au serveur
+* 4 - Le serveur transmet un message au push service 
+* 5 - Le push service va transmettre un message push au service worker
 
 <!--v-->
 
