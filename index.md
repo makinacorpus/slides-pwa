@@ -13,7 +13,7 @@ revealOptions:
 
 ### Alexandra Janin
 
-Note: Makina Corpus : société de service en logiciel libre, spécialisée dans le développement d'applications métiers et de cartographies sur le web.
+Note: Makina Corpus : société de service en logiciel libre, spécialisée dans le développement d'applications métiers et de cartographiques sur le web.
 
 ---
 
@@ -113,11 +113,9 @@ Note: Aujourd'hui, les services workers sont compatibles avec, **Chrome**, **Fir
 
 # Personnalisation du thème
 
-## `manifest.json`
-
 <!--v-->
 
-# Rôle du `manifest.json`
+# Via le `manifest.json`
 
 Le fichier `manifest.json` permet la personnalisation des éléments suivant : 
 
@@ -134,6 +132,38 @@ Il est déclaré via le html
 ```html
 <link rel="manifest" href="/manifest.json">
 ```
+
+<!--v-->
+
+# Via les balises link
+
+```html
+<!-- Chrome --> 
+<link rel="icon" sizes="192x192" href="icon.png"><link rel="apple-touch-icon" href="ios-icon.png">
+<meta name="theme-color" content="#4285f4"> 
+<!-- Safari --> 
+<link rel="apple-touch-startup-image" href="icon.png">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<!-- IE --> 
+<meta name="msapplication-square310x310logo" content="icon_largetile.png"> 
+```
+
+[PWACompat](https://github.com/GoogleChromeLabs/pwacompat) : génère les balises et un manifest optimisé pour la compatibilité (iOS, anciennes versions de webkit,...)
+
+
+<!--v-->
+
+## Définir le nom et le point d'entrée de l'application
+
+![](images/names.png)
+
+<!--v-->
+
+### Définir la couleur principale : `theme_color`
+
+Détecté automatiquement par Chrome, personnalisable.
+
+![Theme color](images/theme-color.png)
 
 <!--v-->
 
